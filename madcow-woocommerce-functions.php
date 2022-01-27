@@ -96,17 +96,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
         remove_action('woocommerce_review_meta','woocommerce_review_display_meta', 10);
         add_action('woocommerce_review_after_comment_text','woocommerce_review_display_meta', 15);
     }
-    /**
-     * Remove product data tabs
-     */
+    /* Remove product data tabs */
     add_filter( 'woocommerce_product_tabs', 'woo_remove_product_tabs', 98 );
 
     function woo_remove_product_tabs( $tabs ) {
-
-        //unset( $tabs['description'] );      	// Remove the description tab
-        //unset( $tabs['reviews'] ); 			// Remove the reviews tab
         unset( $tabs['additional_information'] );  	// Remove the additional information tab
-
         return $tabs;
     }
     /**
