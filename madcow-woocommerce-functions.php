@@ -130,7 +130,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
     add_action( 'woocommerce_after_single_product_summary', 'madcow_add_fabs', 14);
     function madcow_add_fabs() {
-        get_template_part ('woocommerce/single-product-fabs');
+        $fab_title_1 = get_field('feature_title_1' );
+        if($fab_title_1):
+            get_template_part ('woocommerce/single-product-fabs');
+        endif;
     }
 
     /**
