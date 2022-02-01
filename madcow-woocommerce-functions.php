@@ -41,33 +41,44 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
     add_action( 'woocommerce_external_add_to_cart', 'madcow_external_add_to_cart', 30 );
 
     function madcow_external_add_to_cart() {
-    global $product;
+        global $product;
 
-    if ( ! $product->add_to_cart_url() ) {
-        return;
+        if ( ! $product->add_to_cart_url() ) {
+            return;
+        }
+
+        $product_url = $product->add_to_cart_url();
+        if(strpos($product_url, 'myspreadshop')) {
+            $button_text = 'Shop with Spreadshop';
+        } elseif (strpos($product_url, 'finalsurge')) {
+            $button_text = 'Shop with FinalSurge';
+        } elseif (strpos($product_url, 'acuityscheduling')) {
+            $button_text = 'Schedule';
+        } else {
+            $button_text = $product->single_add_to_cart_text();
+        }
+        /**
+        * The code below outputs the edited button with target="_blank" added to the html markup.
+        */
+        do_action( 'woocommerce_before_add_to_cart_button' ); ?>
+
+        <p class="cart">
+        <a href="<?php echo esc_url( $product_url ); ?>" rel="nofollow" class="single_add_to_cart_button button alt" target="_blank">
+        <?php echo esc_html($button_text ); ?></a>
+        </p>
+
+        <?php do_action( 'woocommerce_after_add_to_cart_button' );
     }
 
-    $product_url = $product->add_to_cart_url();
-    if(strpos($product_url, 'myspreadshop')) {
-        $button_text = 'Shop with Spreadshop';
-    } elseif (strpos($product_url, 'finalsurge')) {
-        $button_text = 'Shop with FinalSurge';
-    } elseif (strpos($product_url, 'acuityscheduling')) {
-        $button_text = 'Schedule';
-    } else {
-        $button_text = $product->single_add_to_cart_text();
-    }
-    /**
-    * The code below outputs the edited button with target="_blank" added to the html markup.
-    */
-    do_action( 'woocommerce_before_add_to_cart_button' ); ?>
 
-    <p class="cart">
-    <a href="<?php echo esc_url( $product_url ); ?>" rel="nofollow" class="single_add_to_cart_button button alt" target="_blank">
-    <?php echo esc_html($button_text ); ?></a>
-    </p>
-
-    <?php do_action( 'woocommerce_after_add_to_cart_button' );
+    add_filter( 'woocommerce_loop_add_to_cart_link', 'madcow_replace_add_to_cart_button', 10, 2 );
+    function madcow_replace_add_to_cart_button( $button, $product ) {
+        if (is_product_category() || is_shop()) {
+            $button_text = __("View Product", "woocommerce");
+            $button_link = $product->get_permalink();
+            $button = '<a class="mcw-archive-page-button button" href="' . $button_link . '">' . $button_text . '</a>';
+            return $button;
+        }
     }
 
 
