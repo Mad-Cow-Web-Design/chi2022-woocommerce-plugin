@@ -168,7 +168,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
      */
     add_filter( 'woocommerce_breadcrumb_home_url', 'woo_custom_breadrumb_home_url' );
     function woo_custom_breadrumb_home_url() {
-        return home_url( '/' ) . 'chistore/';
+        return home_url( '/' ) . 'store/';
     }
     /**
      * Change several of the breadcrumb defaults
